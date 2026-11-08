@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Portfolio y Currículum</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body style="max-width: 900px; margin: 30px auto; font-family: Arial, sans-serif;">
+
+<h1>Edición de Datos Personales y Proyectos</h1>
+
+<!-- Aviso general de error de validación -->
+<div th:if="${mensajeErrorGeneral != null}" style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+    <strong th:text="${mensajeErrorGeneral}">Revisa los campos indicados</strong>
+</div>
+
+<form th:action="@{/portfolio/editar}" th:object="${formDTO}" method="post">
+
+    <!-- Datos Personales -->
+    <fieldset style="margin-bottom: 20px; padding: 15px; border-radius: 5px;">
+        <legend><h3>Datos Personales</h3></legend>
+
+        <label>Nombre completo (*):</label><br>
+        <input type="text" th:field="*{nombre}" style="width: 100%;"><br>
+        <span th:if="${errorNombre != null}" style="color: red; font-size: 0.85rem;" th:text="${errorNombre}"></span><br><br>
+
+        <label>Titular profesional (*):</label><br>
+        <input type="text" th:field="*{titular}" style="width: 100%;"><br>
+        <span th:if="${errorTitular != null}" style="color: red; font-size: 0.85rem;" th:text="${errorTitular}"></span><br><br>
+
+        <label>Presentación (*):</label><br>
+        <textarea th:field="*{presentacion}" rows="3" style="width: 100%;"></textarea><br>
+        <span th:if="${errorPresentacion != null}" style="color: red; font-size: 0.85rem;" th:text="${errorPresentacion}"></span><br><br>
+
+        <label>Ciudad (opcional):</label><br>
+        <input type="text" th:field="*{ciudad}" style="width: 100%;"><br><br>
+
+        <label>Correo electrónico (opcional):</label><br>
+        <input type="text" th:field="*{correo}" style="width: 100%;"><br>
+        <span th:if="${errorCorreo != null}" style="color: red; font-size: 0.85rem;" th:text="${errorCorreo}"></span>
+    </fieldset>
+
+    <!-- Datos de Proyectos -->
+    <fieldset style="margin-bottom: 20px; padding: 15px; border-radius: 5px;">
+        <legend><h3>Proyectos (Total actual: <span th:text="${formDTO.proyectos.size()}">1</span> / Límite máximo: <span th:text="${maxProyectos}">5</span>)</h3></legend>
+
+        <span th:if="${errorProyectos != null}" style="color: red; font-size: 0.85rem;" th:text="${errorProyectos}"></span>
+
+        <div th:each="p, stat : *{proyectos}" style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #dee2e6;">
+            <h4 style="margin-top: 0;">Proyecto #<span th:text="${stat.index + 1}">1</span></h4>
+
+            <label>Título:</label><br>
+            <input type="text" th:field="*{proyectos[__${stat.index}__].titulo}" style="width: 100%;"><br><br>
+
+            <label>Año:</label><br>
+            <input type="text" th:field="*{proyectos[__${stat.index}__].anio}" style="width: 150px;"><br><br>
+
+            <label>Categoría:</label><br>
+            <select th:field="*{proyectos[__${stat.index}__].categoria}">
+                <option value="">Selecciona categoría</option>
+                <option value="Aplicaciones">Aplicaciones</option>
+                <option value="Sitios web">Sitios web</option>
+                <option value="Diseño">Diseño</option>
+            </select><br><br>
+
+            <label>Estado:</label><br>
+            <select th:field="*{proyectos[__${stat.index}__].estado}">
+                <option value="">Selecciona estado</option>
+                <option value="En curso">En curso</option>
+                <option value="Terminado">Terminado</option>
+            </select><br><br>
+
+            <label>Descripción:</label><br>
+            <textarea th:field="*{proyectos[__${stat.index}__].descripcion}" rows="2" style="width: 100%;"></textarea><br>
+
+            <!-- Botón Quitar este proyecto -->
+            <button type="submit" name="action" th:value="'remove_' + ${stat.index}" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-top: 10px;">Quitar este proyecto</button>
+        </div>
+
+        <!-- Control del botón Añadir proyecto según el límite -->
+        <div th:if="${formDTO.proyectos.size() < maxProyectos}">
+            <button type="submit" name="action" value="add" style="background: #198754; color: white; border: none; padding: 8px 15px; border-radius: 4px;">Añadir proyecto</button>
+        </div>
+        <div th:unless="${formDTO.proyectos.size() < maxProyectos}" style="color: #6c757d; font-weight: bold; margin-top: 10px;">
+            Has alcanzado el límite de proyectos
+        </div>
+    </fieldset>
+
+    <!-- Botón Generar Vista Previa -->
+    <button type="submit" name="action" value="preview" style="background: #0d6efd; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 5px;">Generar vista previa</button>
+</form>
+
+</body>
+</html>

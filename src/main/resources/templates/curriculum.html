@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{cv.titulo.pagina}">Currículum Personal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Perfil -->
+<section>
+    <h1 th:text="${nombre}">Nombre por defecto</h1>
+    <h3 th:text="${titular}">Titular profesional</h3>
+    <p th:text="${presentacion}">Descripción del perfil...</p>
+</section>
+
+<!-- Contacto (th:if oculta la sección si no hay contacto) -->
+<section th:if="${contacto != null and !#strings.isEmpty(contacto)}">
+    <h2 th:text="#{cv.titulo.contacto}">Contacto</h2>
+    <p><span th:text="#{cv.label.email}">Email</span>: <a th:href="'mailto:' + ${contacto}" th:text="${contacto}">correo@ejemplo.com</a></p>
+</section>
+
+<!-- Formación -->
+<section>
+    <h2 th:text="#{cv.titulo.formacion}">Formación</h2>
+    <ul>
+        <li th:each="f : ${formacion}">
+            <strong th:text="${f.estudios}">Estudios</strong> — <span th:text="${f.centro}">Centro</span>
+            (<span th:if="${f.anioFin == 'En curso'}" th:text="#{cv.curso.actual}">En curso</span><span th:unless="${f.anioFin == 'En curso'}" th:text="${f.anioFin}">2024</span>)
+        </li>
+    </ul>
+</section>
+
+<!-- Experiencia -->
+<section>
+    <h2 th:text="#{cv.titulo.experiencia}">Experiencia</h2>
+    <div th:if="${#lists.isEmpty(experiencia)}">
+        <p th:text="#{cv.experiencia.vacia}">En busca de mi primera experiencia</p>
+    </div>
+    <ul th:unless="${#lists.isEmpty(experiencia)}">
+        <li th:each="e : ${experiencia}">
+            <strong th:text="${e.puesto}">Puesto</strong> <span th:text="#{cv.experiencia.en}">en</span> <span th:text="${e.organizacion}">Organización</span>
+            (<span th:text="${e.periodo}">Periodo</span>)
+        </li>
+    </ul>
+</section>
+
+<!-- Habilidades -->
+<section>
+    <h2 th:text="#{cv.titulo.habilidades}">Habilidades</h2>
+    <ul>
+        <li th:each="h : ${habilidades}" style="margin-bottom: 8px;">
+            <span th:text="${h.nombre}">Habilidad</span> —
+            <span th:switch="${h.nivel}">
+                    <span th:case="'alto'" class="nivel-alto" th:text="#{cv.nivel.alto}">Alto</span>
+                    <span th:case="'medio'" class="nivel-medio" th:text="#{cv.nivel.medio}">Medio</span>
+                    <span th:case="'bajo'" class="nivel-bajo" th:text="#{cv.nivel.bajo}">Bajo</span>
+                </span>
+        </li>
+    </ul>
+</section>
+
+<!-- Idiomas -->
+<section>
+    <h2 th:text="#{cv.titulo.idiomas}">Idiomas</h2>
+    <ul>
+        <li th:each="i : ${idiomas}" style="margin-bottom: 8px;">
+            <span th:text="${i.nombre}">Idioma</span> —
+            <span th:switch="${i.nivel}">
+                    <span th:case="'alto'" class="nivel-alto" th:text="#{cv.nivel.alto}">Alto</span>
+                    <span th:case="'medio'" class="nivel-medio" th:text="#{cv.nivel.medio}">Medio</span>
+                    <span th:case="'bajo'" class="nivel-bajo" th:text="#{cv.nivel.bajo}">Bajo</span>
+                </span>
+        </li>
+    </ul>
+</section>
+
+<!-- Botón Imprimir / PDF -->
+<section style="margin-top: 30px;">
+    <button onclick="window.print()" th:text="#{cv.boton.pdf}">Imprimir / Guardar en PDF</button>
+</section>
+
+</body>
+</html>
+
+

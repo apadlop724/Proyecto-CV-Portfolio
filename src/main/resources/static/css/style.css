@@ -1,0 +1,70 @@
+
+/*
+Clases para Hito 1
+ */
+
+.nivel-alto {
+    background-color: #198754;
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.nivel-medio {
+    background-color: #8fd19e;
+    color: #000000;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.nivel-bajo {
+    background-color: #d1e7dd;
+    color: #000000;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Estilo simple para la página */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 20px;
+    color: #333;
+}
+
+section {
+    margin-bottom: 25px;
+}
+
+
+/*
+Clases para Hito 2
+ */
+.etiqueta-curso {
+    background-color: #198754;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.etiqueta-terminado {
+    background-color: #6c757d;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.tech-tag {
+    background-color: #e9ecef;
+    padding: 2px 6px;
+    margin-right: 4px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+

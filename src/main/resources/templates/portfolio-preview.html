@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Vista Previa del Portfolio</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body style="max-width: 800px; margin: 30px auto; font-family: Arial, sans-serif;">
+
+<h1>Vista Previa del Currículum y Portfolio</h1>
+
+<!-- Datos Personales -->
+<section style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h2 th:text="${formDTO.nombre}">Nombre Completo</h2>
+    <h4 th:text="${formDTO.titular}" style="color: #6c757d;">Titular profesional</h4>
+    <p th:text="${formDTO.presentacion}">Presentación...</p>
+
+    <div th:if="${formDTO.ciudad != null and !formDTO.ciudad.isEmpty()}">
+        <p><strong>Ciudad:</strong> <span th:text="${formDTO.ciudad}">Ciudad</span></p>
+    </div>
+    <div th:if="${formDTO.correo != null and !formDTO.correo.isEmpty()}">
+        <p><strong>Correo:</strong> <a th:href="'mailto:' + ${formDTO.correo}" th:text="${formDTO.correo}">correo@example.com</a></p>
+    </div>
+</section>
+
+<!-- Proyectos -->
+<section>
+    <h2>Proyectos en el Portfolio</h2>
+
+    <div th:if="${#lists.isEmpty(formDTO.proyectos)}" style="padding: 15px; background: #fff3cd; border-radius: 5px;">
+        <p>Todavía no hay proyectos en este portfolio</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(formDTO.proyectos)}" style="display: flex; flex-direction: column; gap: 15px;">
+        <div th:each="p : ${formDTO.proyectos}" style="border: 1px solid #dee2e6; padding: 15px; border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 th:text="${p.titulo}" style="margin: 0;">Título</h3>
+
+                <!-- Estado con th:switch / th:case -->
+                <span th:switch="${p.estado}">
+                        <span th:case="'En curso'" class="etiqueta-curso" th:text="${p.estado}">En curso</span>
+                        <span th:case="'Terminado'" class="etiqueta-terminado" th:text="${p.estado}">Terminado</span>
+                    </span>
+            </div>
+            <p style="color: #6c757d; font-size: 0.9rem;" th:text="${p.categoria} + ' — ' + ${p.anio}">Categoría — 2026</p>
+            <p th:text="${p.descripcion}">Descripción...</p>
+        </div>
+    </div>
+</section>
+
+<div style="margin-top: 30px;">
+    <a th:href="@{/portfolio/editar}">← Volver a editar</a>
+</div>
+
+</body>
+</html>

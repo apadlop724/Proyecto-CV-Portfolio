@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio de Proyectos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body style="max-width: 900px; margin: 30px auto; font-family: Arial, sans-serif;">
+
+<h1>Portfolio de Proyectos</h1>
+
+<!-- Formulario de Filtro por GET -->
+<form method="get" th:action="@{/portfolio}" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <label for="categoria">Categoría:</label>
+    <select name="categoria" id="categoria">
+        <option value="Todas" th:selected="${categoriaSeleccionada == 'Todas'}">Todas</option>
+        <option value="Aplicaciones" th:selected="${categoriaSeleccionada == 'Aplicaciones'}">Aplicaciones</option>
+        <option value="Sitios web" th:selected="${categoriaSeleccionada == 'Sitios web'}">Sitios web</option>
+        <option value="Diseño" th:selected="${categoriaSeleccionada == 'Diseño'}">Diseño</option>
+    </select>
+
+    <label for="anio" style="margin-left: 15px;">Año:</label>
+    <input type="text" name="anio" id="anio" th:value="${anioSeleccionado}" placeholder="Ej: 2025" style="width: 100px;">
+
+    <button type="submit" style="margin-left: 10px; padding: 4px 12px;">Filtrar</button>
+    <a th:href="@{/portfolio}" style="margin-left: 10px;">Mostrar todos</a>
+
+    <!-- Mensaje de error de año inválido -->
+    <div th:if="${errorAnio != null}" style="color: red; margin-top: 8px; font-size: 0.9rem;" th:text="${errorAnio}"></div>
+</form>
+
+<!-- Cantidad de resultados -->
+<p>Se han encontrado <strong th:text="${totalResultados}">0</strong> resultados.</p>
+
+<!-- Mensaje si no hay coincidencias -->
+<div th:if="${#lists.isEmpty(proyectos)}" style="padding: 20px; background: #fff3cd; border-radius: 5px;">
+    <p>No se encontraron proyectos</p>
+</div>
+
+<!-- Listado de Proyectos en Tarjetas -->
+<div style="display: flex; flex-direction: column; gap: 20px;">
+    <div th:each="p : ${proyectos}" style="border: 1px solid #dee2e6; padding: 20px; border-radius: 8px; background: #fff;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 th:text="${p.titulo}" style="margin: 0;">Título del Proyecto</h3>
+
+            <!-- Estado con th:switch / th:case -->
+            <span th:switch="${p.estado}">
+                    <span th:case="'En curso'" class="etiqueta-curso" th:text="${p.estado}">En curso</span>
+                    <span th:case="'Terminado'" class="etiqueta-terminado" th:text="${p.estado}">Terminado</span>
+                </span>
+        </div>
+
+        <p style="color: #6c757d; font-size: 0.9rem; margin: 5px 0;">
+            <strong th:text="${p.categoria}">Categoría</strong> — <span th:text="${p.anio}">2026</span>
+        </p>
+
+        <p th:text="${p.descripcion}">Descripción del proyecto...</p>
+
+        <!-- Tecnologías (oculto si la lista está vacía o nula con th:if) -->
+        <div th:if="${p.tecnologias != null and !#lists.isEmpty(p.tecnologias)}" style="margin-bottom: 10px;">
+            <strong>Tecnologías:</strong>
+            <span th:each="tech : ${p.tecnologias}" class="tech-tag" th:text="${tech}">Java</span>
+        </div>
+
+        <!-- Imagen representativa (solo si existe con th:if) -->
+        <div th:if="${p.imagen != null and !#strings.isEmpty(p.imagen)}" style="margin: 10px 0;">
+            <img th:src="@{${p.imagen}}" th:alt="'Imagen representativa de ' + ${p.titulo}" style="max-width: 200px; border-radius: 4px;">
+        </div>
+
+        <!-- Enlace público (solo si existe con th:if para evitar enlaces vacíos) -->
+        <div th:if="${p.enlace != null and !#strings.isEmpty(p.enlace)}">
+            <a th:href="${p.enlace}" target="_blank">Ver proyecto en línea</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
